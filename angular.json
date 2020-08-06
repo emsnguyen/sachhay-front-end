@@ -123,6 +123,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "sachhay-front-end"
+    }
+  },
+  "defaultProject": "sachhay-front-end",
+  "cli": {
+    "analytics": "2ad79deb-e280-4cb7-975f-218af464bc42"
+  }
 }
