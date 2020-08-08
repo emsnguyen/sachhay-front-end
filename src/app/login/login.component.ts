@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     if (this.tokenStorage.getToken()) {
       this.isLoggedIn = true;
-      this.role = this.tokenStorage.getUser().role;
+      this.isAdmin = this.tokenStorage.getUser().role === 1;
     }
   }
 
