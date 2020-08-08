@@ -8,7 +8,7 @@ import { TokenStorageService } from './_service/token-storage.service';
 })
 export class AppComponent {
   title = 'sachhay-front-end';
-  private roles: string[];
+  private role: number;
   isLoggedIn = false;
   showAdminBoard = false;
   username: string;
@@ -20,9 +20,9 @@ export class AppComponent {
 
     if (this.isLoggedIn) {
       const user = this.tokenStorageService.getUser();
-      this.roles = user.roles;
+      this.role = user.role;
 
-      this.showAdminBoard = this.roles.includes('ROLE_ADMIN');
+      this.showAdminBoard = this.role === 1;
 
       this.username = user.username;
     }

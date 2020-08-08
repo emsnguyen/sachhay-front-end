@@ -69,7 +69,7 @@
     </form>
 
     <div class="alert alert-success" *ngIf="isLoggedIn">
-      Logged in as {{ roles }}.
+      Logged in as <span *ngIf="isAdmin">Admin</span><span *ngIf="!isAdmin">User</span>.
     </div>
   </div>
 </div>
