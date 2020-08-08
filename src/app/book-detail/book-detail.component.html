@@ -1,0 +1,88 @@
+<div class="container mt-5">
+  <h2>Book Detail</h2>
+  <div *ngIf="error" class="alert alert-danger">
+    <ul>
+      <li *ngFor="let e of error">{{ e }}</li>
+    </ul>
+  </div>
+  <div *ngIf="book" class="card grid">
+    <div class="card-body">
+      <img id="cover-image" src="{{ book.images[0].url }}" alt="book cover" />
+      <!-- Add your own rating -->
+
+      <div class="text-center" id="rating-area">
+        <span class="fa fa-star my-rating checked" id="rating-{{ i }}"></span>
+        <span class="fa fa-star my-rating" id="rating-{{ i }}"></span>
+        <p class="processing-text">Processing</p>
+      </div>
+      <div class="text-center" id="rating-area">
+        <span class="fa fa-star my-rating" id="rating-{{ i }}"></span>
+        <p class="processing-text">Processing</p>
+      </div>
+    </div>
+    <div class="card-body">
+      <input type="hidden" class="text" id="book_id" value="{{ book.id }}" />
+
+      <h5 class="card-header">{{ book.title }}</h5>
+      <div class="card">
+        <div class="card-body">
+          <span class="fa fa-star checked"></span>
+          <span class="fa fa-star"></span>
+          (<span id="rating-counter">{{ book.ratings.length }}</span> votes)
+        </div>
+      </div>
+      <p class="card-text">{{ book.review }}</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h6 class="card-header">
+      <p><span id="comment-counter">{{ book.comments.length }}</span> Comments</p>
+    </h6>
+    <div *ngIf="book.comments.length" class="card-body">
+      <div id="comment-listing">
+        <ul *ngFor="let comment of book.comments" class="list-inline m-0" id="ul-{{ comment.id }}">
+          <li class="list-inline-item">
+            <div class="text-secondary" id="comment-wrapper-{{ comment.id }}">
+              <p class="card-text" id="comment-detail-{{ comment.id }}">{{ comment.content }}</p>
+              <p class="card-text">
+                <em>{{ comment.created_by }}</em> - <span>{{ comment.created_at }}</span>
+              </p>
+              <p class="card-text" id="comment-error"></p>
+            </div>
+          </li>
+          <li class="list-inline-item">
+            <button class="btn btn-success btn-sm rounded-0 btnEditCmt"
+              (click)="showEditCommentForm(comment.id, comment.content)" type="button" data-toggle="tooltip"
+              id="btnEditCmt-{{ comment.id }}" data-placement="top" title="Edit"><i class="fa fa-edit"></i></button>
+          </li>
+          <li class="list-inline-item">
+            <button class="btn btn-danger btn-sm rounded-0 btnDeleteCmt" (click)="deleteComment(comment.id)"
+              type="button" data-toggle="tooltip" id="btnDeleteCmt-{{ comment.id }}" data-placement="top"
+              title="Delete"><i class="fa fa-trash"></i></button>
+          </li>
+          <hr />
+        </ul>
+      </div>
+      <form id="comment_form">
+        <div class="form-group">
+          <textarea id="comment-content" name="content" class="form-control"></textarea>
+        </div>
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary">Add comment</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <a href="/dashboard/books/{{ book.id }}/edit" class="btn btn-primary">Edit</a>
+      <form>
+        <button (click)="deleteBook(book.id)" class="btn btn-danger">Delete book</button>
+      </form>
+    </div>
+  </div>
+
+</div>
+<script src="/bookDetail.js"></script>

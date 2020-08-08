@@ -1,5 +1,35 @@
-<div class="container">
-  <header class="jumbotron">
-    <p>{{ content }}</p>
-  </header>
+<div class="container mt-5">
+  <h2>Available Books</h2>
+  <div *ngIf="books && books.length">
+    <div *ngFor="let book of books">
+      <div class="card">
+        <h5 class="card-header">{{ book.title }} by <span><em>{{ book.author }}</em></span></h5>
+        <div class="card-body">
+          <div *ngIf="book.images.length">
+            <img src="{{ book.images[0].url }}" alt="" class="cover-image" />
+          </div>
+
+          <p class="card-text">{{ book.review }}</p>
+          <p class="card-text">
+            <strong>{{ book.comments.length }}</strong> comments
+          </p>
+          <!-- add rating -->
+          <div class="d-flex">
+            <div *ngFor="let i of createRange(0, book.ratings.length)">
+              <button type="button" class="btnrating btn btn-warning" data-attr="1" id="rating-star-1">
+                <i class="fa fa-star" aria-hidden="true"></i>
+              </button>
+            </div>
+            <div *ngFor="let i of createRange(book.ratings.length, 5)">
+              <button type="button" class="btnrating btn btn-default" data-attr="1" id="rating-star-1">
+                <i class="fa fa-star" aria-hidden="true"></i>
+              </button>
+            </div>
+          </div>
+
+          <a routerLink="/books/{{book.id}}" class="btn btn-primary">View details</a>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

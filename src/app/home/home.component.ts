@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../_service/user.service';
+import { Book } from '../_models/book';
+import { Rating } from '../_models/rating';
+import { BookService } from '../_service/book.service';
 
 @Component({
   selector: 'app-home',
@@ -8,19 +11,33 @@ import { UserService } from '../_service/user.service';
 })
 export class HomeComponent implements OnInit {
 
-  content: string;
+  books: Book[];
+  errorMessage:string;
 
-  constructor(private userService: UserService) { }
+  constructor(private bookService: BookService) { }
 
   ngOnInit(): void {
-    this.userService.getPublicContent().subscribe(
-      data => {
-        this.content = data;
+    this.bookService.getAll().subscribe(
+      res => {
+        this.books = res;
+        this.books.forEach(book => book.averageRating = this.getAverageBookRating(book.ratings));
       },
       err => {
-        this.content = JSON.parse(err.error).message;
+        this.errorMessage = err.message;
       }
     );
+  }
+
+  getAverageBookRating(ratings:Rating[]) : number{
+    const intitalValue = 0;
+    return ratings.reduce((a, b) => (a + b.value), intitalValue) / ratings.length;
+  }
+  createRange(start, end){
+    var items: number[] = [];
+    for(var i = start; i < end; i++){
+       items.push(i);
+    }
+    return items;
   }
 
 }

@@ -13,6 +13,9 @@ import { BoardUserComponent } from './board-user/board-user.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { authInterceptorProviders } from './_helpers/auth.interceptor';
+import { BookDetailComponent } from './book-detail/book-detail.component';
+import { BookEditComponent } from './book-edit/book-edit.component';
+import { BookCreateComponent } from './book-create/book-create.component';
 
 
 @NgModule({
@@ -23,7 +26,10 @@ import { authInterceptorProviders } from './_helpers/auth.interceptor';
     HomeComponent,
     ProfileComponent,
     BoardAdminComponent,
-    BoardUserComponent
+    BoardUserComponent,
+    BookDetailComponent,
+    BookEditComponent,
+    BookCreateComponent
   ],
   imports: [
     BrowserModule,
