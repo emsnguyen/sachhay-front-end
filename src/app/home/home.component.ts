@@ -19,7 +19,7 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.bookService.getAll().subscribe(
       res => {
-        this.books = res;
+        this.books = res.data;
         this.books.forEach(book => book.averageRating = this.getAverageBookRating(book.ratings));
       },
       err => {
@@ -39,5 +39,4 @@ export class HomeComponent implements OnInit {
     }
     return items;
   }
-
 }

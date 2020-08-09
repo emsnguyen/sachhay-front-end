@@ -23,11 +23,11 @@ export class BookService {
   }
 
   create(book:Book):Observable<any> {
-    return this.http.post(BOOK_API, httpOptions);
+    return this.http.post(BOOK_API, book, httpOptions);
   }
 
   update(book:Book, bookId:number):Observable<any> {
-    return this.http.put(BOOK_API+bookId, httpOptions);
+    return this.http.put(BOOK_API+bookId, book, httpOptions);
   }
 
   delete(bookId:number):Observable<any> {

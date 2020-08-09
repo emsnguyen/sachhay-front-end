@@ -15,12 +15,12 @@
           </p>
           <!-- add rating -->
           <div class="d-flex">
-            <div *ngFor="let i of createRange(0, book.ratings.length)">
+            <div *ngFor="let i of createRange(0, book.averageRating)">
               <button type="button" class="btnrating btn btn-warning" data-attr="1" id="rating-star-1">
                 <i class="fa fa-star" aria-hidden="true"></i>
               </button>
             </div>
-            <div *ngFor="let i of createRange(book.ratings.length, 5)">
+            <div *ngFor="let i of createRange(book.averageRating, 5)">
               <button type="button" class="btnrating btn btn-default" data-attr="1" id="rating-star-1">
                 <i class="fa fa-star" aria-hidden="true"></i>
               </button>

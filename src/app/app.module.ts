@@ -16,6 +16,11 @@ import { authInterceptorProviders } from './_helpers/auth.interceptor';
 import { BookDetailComponent } from './book-detail/book-detail.component';
 import { BookEditComponent } from './book-edit/book-edit.component';
 import { BookCreateComponent } from './book-create/book-create.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatDialogModule } from '@angular/material/dialog';
+import {MatButtonModule} from '@angular/material/button';
+import {MatCardModule} from '@angular/material/card';
+import { EditRatingDialogComponent } from './edit-rating-dialog/edit-rating-dialog.component';
 
 
 @NgModule({
@@ -29,15 +34,21 @@ import { BookCreateComponent } from './book-create/book-create.component';
     BoardUserComponent,
     BookDetailComponent,
     BookEditComponent,
-    BookCreateComponent
+    BookCreateComponent,
+    EditRatingDialogComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatCardModule
   ],
   providers: [authInterceptorProviders],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents:[EditRatingDialogComponent]
 })
 export class AppModule { }
