@@ -1,0 +1,25 @@
+<h2 mat-dialog-title>Your comment</h2>
+<mat-dialog-content>
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="form-group">
+        <form [formGroup]="commentForm" novalidate >
+          <textarea id="comment-content" name="content" formControlName="content" class="form-control"></textarea>
+          <div *ngIf="content.invalid && (content.dirty || content.touched)" class="alert alert-danger">
+
+            <div *ngIf="content.errors.required">
+              Comment is required.
+            </div>
+            <div *ngIf="content.errors.minlength">
+              Comment must be at least 3 characters long.
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button class="mat-raised-button" [disabled]="!commentForm.valid" (click)="close()">Close</button>
+  <button class="mat-raised-button mat-primary" [disabled]="!commentForm.valid" (click)="save()">Save</button>
+</mat-dialog-actions>

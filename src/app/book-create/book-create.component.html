@@ -1,1 +1,54 @@
-<p>book-create works!</p>
+<div class="container">
+  <p class="h2 text-center">Add a new book</p>
+  <form [formGroup]="bookForm">
+      <div class="form-group">
+          <div><label>Update Cover Image:</label></div>
+          <input type="hidden" value="0" name="isImageUpdated"/>
+                  <img id="cover-image" src=""/>
+          <input formControlName="images" class="browse-input" type="file" class="form-control" id="cover-image"
+              onchange="loadPreview(this);">
+      </div>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Enter title</mat-label>
+        <input matInput placeholder="pat@example.com" [formControl]="title" required>
+        <mat-error *ngIf="title.errors.required">Title is required</mat-error>
+      </mat-form-field>
+
+      <div class="form-group">
+          <label>Author:</label>
+          <input class="form-control" type="text" formControlName="author" value={{book?.author}} required placeholder="Author name" />
+      </div>
+      <div *ngIf="author.errors.required">
+        Author is required.
+      </div>
+
+      <div class="form-group">
+          <label>Isbn:</label>
+          <input class="form-control" type="text" formControlName="isbn" value={{book?.isbn}} required placeholder="Isbn" />
+      </div>
+      <div *ngIf="isbn.errors.required">
+        Isbn is required.
+      </div>
+
+      <div class="form-group">
+          <label>Publisher:</label>
+          <input class="form-control" type="text" formControlName="publisher"  value={{book?.publisher}} required placeholder="Publisher" />
+      </div>
+      <div *ngIf="publisher.errors.required">
+        Publisher is required.
+      </div>
+
+      <div class="form-group">
+          <label>Review:</label>
+          <textarea class="form-control" type="text" formControlName="review" value={{book?.review}} required placeholder="Review"></textarea>
+      </div>
+      <div *ngIf="review.errors.required">
+        Review is required.
+      </div>
+
+      <div class="form-group">
+          <input mat-raised-button type="submit" value="Update" />
+      </div>
+  </form>
+</div>

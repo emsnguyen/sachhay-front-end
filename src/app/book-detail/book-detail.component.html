@@ -26,23 +26,25 @@
         </div>
       </div>
     </div>
-    <div class="card-body">
+    <div>
 
       <input type="hidden" class="text" id="book_id" value="{{ book.id }}" />
 
-      <div class="card">
-        <div class="card-body">
-          <ul class="list-inline rating-list" *ngFor="let i of createRange(0,5)" style="display: inline-block">
-            <li [ngClass]="{'selected': (i < book.averageRating)}">
-              <i class="fa fa-star"></i>
-            </li>
-          </ul>
-          (<span id="rating-counter">{{ book.ratings.length }}</span> votes)
-        </div>
-      </div>
-
-      <p class="card-text">{{ book.review }}</p>
+      <ul class="list-inline rating-list" style="display: inline-block">
+        <li *ngFor="let i of createRange(0,5)" [ngClass]="{'selected': (i < book.averageRating)}">
+          <i class="fa fa-star"></i>
+        </li>
+        <li>(<span id="rating-counter">{{ book.ratings.length }}</span> votes)</li>
+      </ul>
     </div>
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Review</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <h3 class="card-text">{{ book.review }}</h3>
+      </mat-card-content>
+    </mat-card>
 
     <mat-card>
       <mat-card-header>
@@ -52,10 +54,10 @@
       </mat-card-header>
       <mat-card-content *ngIf="book.comments.length">
         <div id="comment-listing">
-          <ul *ngFor="let comment of book.comments" class="list-inline m-0" id="ul-{{ comment.id }}">
+          <ul *ngFor="let comment of book.comments" class="list-inline m-0">
             <li class="list-inline-item">
-              <div class="text-secondary" id="comment-wrapper-{{ comment.id }}">
-                <p class="card-text" id="comment-detail-{{ comment.id }}">{{ comment.content }}</p>
+              <div class="text-secondary">
+                <p class="card-text">{{ comment.content }}</p>
                 <p class="card-text">
                   <em>{{ comment.created_by }}</em> - <span>{{ comment.created_at }}</span>
                 </p>
@@ -63,9 +65,9 @@
               </div>
             </li>
             <li class="list-inline-item">
-              <button class="btn btn-success btn-sm rounded-0 btnEditCmt"
-                (click)="updateComment(comment.id, comment)" type="button" data-toggle="tooltip"
-                id="btnEditCmt-{{ comment.id }}" data-placement="top" title="Edit"><i class="fa fa-edit"></i></button>
+              <button class="btn btn-success btn-sm rounded-0 btnEditCmt" (click)="updateComment(comment.id, comment)"
+                type="button" data-toggle="tooltip" id="btnEditCmt-{{ comment.id }}" data-placement="top" title="Edit"><i
+                  class="fa fa-edit"></i></button>
             </li>
             <li class="list-inline-item">
               <button class="btn btn-danger btn-sm rounded-0 btnDeleteCmt" (click)="deleteComment(comment.id)"
@@ -75,14 +77,24 @@
             <hr />
           </ul>
         </div>
-        <form id="comment_form">
-          <div class="form-group">
-            <textarea id="comment-content" name="content" class="form-control"></textarea>
-          </div>
-          <div class="form-group">
-            <button type="submit" mat-raised-button color="primary">Add comment</button>
-          </div>
-        </form>
+        <div class="form-group">
+          <form [formGroup]="commentForm" novalidate (ngSubmit)="addComment()" id="comment_form">
+            <textarea id="comment-content" name="content" formControlName="content" class="form-control"></textarea>
+            <div *ngIf="content.invalid && (content.dirty || content.touched)" class="alert alert-danger">
+
+              <div *ngIf="content.errors.required">
+                Comment is required.
+              </div>
+              <div *ngIf="content.errors.minlength">
+                Comment must be at least 3 characters long.
+              </div>
+            </div>
+            <div class="form-group">
+              <button type="submit" [disabled]="!commentForm.valid" mat-raised-button color="primary">Add
+                comment</button>
+            </div>
+          </form>
+        </div>
       </mat-card-content>
     </mat-card>
 
@@ -97,5 +109,9 @@
   </div>
 </div>
 <ng-template #stillLoading>
-  <p>Loading...</p>
+  <mat-card>
+    <mat-card-content>
+      <mat-spinner></mat-spinner>
+    </mat-card-content>
+  </mat-card>
 </ng-template>

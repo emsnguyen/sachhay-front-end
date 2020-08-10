@@ -10,6 +10,8 @@ import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dial
 import { EditRatingDialogComponent } from '../edit-rating-dialog/edit-rating-dialog.component';
 import { RatingService } from '../_service/rating.service';
 import { CommentService } from '../_service/comment.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { EditCommentDialogComponent } from '../edit-comment-dialog/edit-comment-dialog.component';
 
 @Component({
   selector: 'app-book-detail',
@@ -21,6 +23,7 @@ export class BookDetailComponent implements OnInit {
   error:any;
   rating = 0;
   ratingId:number;
+  commentForm:FormGroup;
 
   constructor(
     private bookService:BookService,
@@ -28,7 +31,8 @@ export class BookDetailComponent implements OnInit {
     private dialog:MatDialog,
     private tokenStorageService: TokenStorageService,
     private ratingService: RatingService,
-    private commentService: CommentService
+    private commentService: CommentService,
+    private fb:FormBuilder
     ) { }
 
   ngOnInit(): void {
@@ -50,6 +54,9 @@ export class BookDetailComponent implements OnInit {
         this.error = error;
       }
     )
+    this.commentForm = this.fb.group({
+      content:['', Validators.compose([Validators.required,Validators.minLength(3)])]
+    });
   }
   getMyRating(ratings:Rating[]):Rating {
     const currentUserRatings = ratings.filter(rating => rating.created_by == this.tokenStorageService.getUser().username);
@@ -97,19 +104,65 @@ export class BookDetailComponent implements OnInit {
   deleteBook(id:number):any {
 
   }
-  addComment(comment:Comment):any {
-
+  addComment():any {
+    const content = this.commentForm.get('content').value;
+    const comment = new Comment();
+    comment.book_id = this.book.id;
+    comment.content = content;
+    this.commentService.create(comment).subscribe(
+      res => {
+        // add comment to comment list
+        this.book.comments.push(res);
+        alert("Comment added");
+        this.commentForm.reset();
+      },
+      err => {
+        alert(err.message);
+      }
+    )
   }
   updateComment(id:number, comment:Comment):any {
+    const dialogRef = this.openCommentDialog(comment.content);
+    dialogRef.afterClosed().subscribe(result => {
+      comment.content = result;
 
+      // update comment to database
+      this.commentService.update(id, comment).subscribe(
+        res => {
+          console.log("Comment updated");
+        },
+        err => {
+          console.log(err.message);
+        }
+      )
+    });
   }
   deleteComment(id:number):any {
-
+    this.commentService.delete(id).subscribe(
+      res => {
+        var deleteIdx = -1;
+        var i;
+        for (i = 0; i < this.book.comments.length; i++) {
+          if (this.book.comments[i].id === id) {
+            deleteIdx = i;
+            break;
+          }
+        }
+        if (deleteIdx === -1) console.log("Comment already deleted");
+        else {
+          this.book.comments.splice(deleteIdx,1);
+          console.log("Comment deleted");
+        }
+      },
+      err => {
+        alert(err.message);
+      }
+    )
   }
 
   addRating():void {
     const dialogRef = this.openRatingDialog();
-    dialogRef.beforeClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe(result => {
       this.rating = result;
       // Add rating vào database
       const ratingObj = new Rating();
@@ -118,15 +171,13 @@ export class BookDetailComponent implements OnInit {
       this.ratingService.create(ratingObj).subscribe(
         res => {
           this.ratingId = res.id;
-          alert("Rating added");
+          this.book.ratings.push(res);
+          console.log("Rating added");
         },
         err => {
           console.log(err);
         }
       )
-    });
-    dialogRef.afterClosed().subscribe(result => {
-
     });
   }
   updateRating():void {
@@ -138,7 +189,7 @@ export class BookDetailComponent implements OnInit {
       ratingObj.value = this.rating;
       this.ratingService.update(this.ratingId, ratingObj).subscribe(
         res => {
-          alert("Rating updated");
+          console.log("Rating updated");
         },
         err => {
           console.log(err);
@@ -149,7 +200,18 @@ export class BookDetailComponent implements OnInit {
   deleteRating() {
     this.ratingService.delete(this.ratingId).subscribe(
       res => {
-        alert("Rating deleted");
+        var deleteIdx = -1;
+        var i;
+        for (i = 0; i < this.book.ratings.length; i++) {
+          if (this.book.ratings[i].id === this.ratingId) {
+            deleteIdx = i;
+            break;
+          }
+        }
+        if (deleteIdx === -1) alert("Rating already deleted");
+        else {
+          this.book.ratings.splice(deleteIdx,1);
+        }
         this.rating = 0;
       },
       err => {
@@ -166,6 +228,15 @@ export class BookDetailComponent implements OnInit {
       }
     } );
   }
+  openCommentDialog(content:string):MatDialogRef<EditCommentDialogComponent> {
+    return this.dialog.open(EditCommentDialogComponent, {
+      disableClose:true,
+      autoFocus:true,
+      data: {
+        content:content
+      }
+    } );
+  }
   createRange(start, end){
     var items: number[] = [];
     for(var i = start; i < end; i++){
@@ -173,4 +244,5 @@ export class BookDetailComponent implements OnInit {
     }
     return items;
   }
+  get content() { return this.commentForm.get('content'); }
 }

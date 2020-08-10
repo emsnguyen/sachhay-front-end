@@ -11,6 +11,9 @@ const httpOptions = {
   providedIn: 'root'
 })
 export class AuthService {
+  refreshToken():Observable<any> {
+    return this.http.post(AUTH_API+ 'refresh', httpOptions);
+  }
 
   constructor(private http:HttpClient) { }
 
