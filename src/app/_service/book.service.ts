@@ -22,8 +22,12 @@ export class BookService {
     return this.http.get(BOOK_API, httpOptions);
   }
 
-  create(book:Book):Observable<any> {
-    return this.http.post(BOOK_API, book, httpOptions);
+  create(formData:FormData):Observable<any> {
+    let headers = new HttpHeaders();
+        /** In Angular 5, including the header Content-Type can invalidate your request */
+    // headers.append('Content-Type', 'multipart/form-data');
+    // headers.append('Accept', 'application/json');
+    return this.http.post(BOOK_API, formData,{headers});
   }
 
   update(book:Book, bookId:number):Observable<any> {

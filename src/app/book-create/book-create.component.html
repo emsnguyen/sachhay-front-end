@@ -1,54 +1,78 @@
 <div class="container">
-  <p class="h2 text-center">Add a new book</p>
-  <form [formGroup]="bookForm">
-      <div class="form-group">
-          <div><label>Update Cover Image:</label></div>
-          <input type="hidden" value="0" name="isImageUpdated"/>
-                  <img id="cover-image" src=""/>
-          <input formControlName="images" class="browse-input" type="file" class="form-control" id="cover-image"
-              onchange="loadPreview(this);">
-      </div>
+  <h2 class="mt-5">Add a new book</h2>
+  <div *ngIf="errors" class="alert alert-danger" role="alert">
+    {{errors}}
+  </div>
+  <form [formGroup]="bookForm" method="post" (ngSubmit)="addBook()" enctype="multipart/form-data">
 
+    <div class="form-group">
+      <button type="button" mat-raised-button (click)="fileInput.click()">Choose cover image</button>
+      <input hidden (change)="onFileSelected($event)" [formControl]="images" #fileInput type="file" id="file" required>
+      <mat-error *ngIf="images.touched && images.invalid">
+        <mat-error *ngIf="images.errors.required">Images is required</mat-error>
+      </mat-error>
+    </div>
+
+    <div *ngIf="imagePreview">
+      <img class="img-fluid" width="500" [src]="imagePreview" alt="preview image" />
+    </div>
+
+    <div class="mt-2">
       <mat-form-field appearance="fill">
-        <mat-label>Enter title</mat-label>
+        <mat-label>Title</mat-label>
         <input matInput placeholder="pat@example.com" [formControl]="title" required>
-        <mat-error *ngIf="title.errors.required">Title is required</mat-error>
+        <mat-error *ngIf="title.touched && title.invalid">
+          <mat-error *ngIf="title.errors.required">Title is required</mat-error>
+        </mat-error>
       </mat-form-field>
+    </div>
 
-      <div class="form-group">
-          <label>Author:</label>
-          <input class="form-control" type="text" formControlName="author" value={{book?.author}} required placeholder="Author name" />
-      </div>
-      <div *ngIf="author.errors.required">
-        Author is required.
-      </div>
+    <div class="mt-2">
+      <mat-form-field appearance="fill">
+        <mat-label>Author</mat-label>
+        <input matInput placeholder="pat@example.com" [formControl]="author" required>
+        <mat-error *ngIf="author.touched && author.invalid">
+          <mat-error *ngIf="author.errors.required">author is required</mat-error>
+        </mat-error>
+      </mat-form-field>
+    </div>
 
-      <div class="form-group">
-          <label>Isbn:</label>
-          <input class="form-control" type="text" formControlName="isbn" value={{book?.isbn}} required placeholder="Isbn" />
-      </div>
-      <div *ngIf="isbn.errors.required">
-        Isbn is required.
-      </div>
+    <div class="mt-2">
+      <mat-form-field appearance="fill">
+        <mat-label>Isbn</mat-label>
+        <input matInput placeholder="pat@example.com" [formControl]="isbn" required>
+        <mat-error *ngIf="isbn.touched && isbn.invalid">
+          <mat-error *ngIf="isbn.errors.required">isbn is required</mat-error>
+        </mat-error>
+      </mat-form-field>
+    </div>
 
-      <div class="form-group">
-          <label>Publisher:</label>
-          <input class="form-control" type="text" formControlName="publisher"  value={{book?.publisher}} required placeholder="Publisher" />
-      </div>
-      <div *ngIf="publisher.errors.required">
-        Publisher is required.
-      </div>
+    <div class="mt-2">
+      <mat-form-field appearance="fill">
+        <mat-label>Publisher</mat-label>
+        <input matInput placeholder="pat@example.com" [formControl]="publisher" required>
+        <mat-error *ngIf="publisher.touched && publisher.invalid">
+          <mat-error *ngIf="publisher.errors.required">publisher is required</mat-error>
+        </mat-error>
+      </mat-form-field>
+    </div>
 
-      <div class="form-group">
-          <label>Review:</label>
-          <textarea class="form-control" type="text" formControlName="review" value={{book?.review}} required placeholder="Review"></textarea>
-      </div>
-      <div *ngIf="review.errors.required">
-        Review is required.
-      </div>
+    <div class="mt-2">
+      <mat-form-field appearance="fill">
+        <mat-label>Review</mat-label>
+        <textarea matInput placeholder="pat@example.com" [formControl]="review" cdkTextareaAutosize
+        cdkAutosizeMinRows="1"
+        cdkAutosizeMaxRows="5"
+        #autosize="cdkTextareaAutosize"
+        ></textarea>
+        <mat-error *ngIf="review.touched && review.invalid">
+          <mat-error *ngIf="review.errors.required">review is required</mat-error>
+        </mat-error>
+      </mat-form-field>
+    </div>
 
-      <div class="form-group">
-          <input mat-raised-button type="submit" value="Update" />
-      </div>
+    <div class="form-group mt-2">
+      <button mat-raised-button [disabled]="!bookForm.valid" >Save</button>
+    </div>
   </form>
 </div>

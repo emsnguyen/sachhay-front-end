@@ -113,11 +113,11 @@ export class BookDetailComponent implements OnInit {
       res => {
         // add comment to comment list
         this.book.comments.push(res);
-        alert("Comment added");
+        console.log("Comment added");
         this.commentForm.reset();
       },
       err => {
-        alert(err.message);
+        console.log(err.message);
       }
     )
   }

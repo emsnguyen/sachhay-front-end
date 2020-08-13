@@ -26,6 +26,7 @@ import { ErrorInterceptor } from './_helpers/error.interceptor';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
+import {TextFieldModule} from '@angular/cdk/text-field';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import {MatInputModule} from '@angular/material/input';
     ReactiveFormsModule,
     MatProgressSpinnerModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    TextFieldModule
   ],
   providers: [
     // { provide: APP_INITIALIZER, useFactory: appInitializer, multi: true, deps: [AuthService] },
