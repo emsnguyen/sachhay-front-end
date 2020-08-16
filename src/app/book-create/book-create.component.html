@@ -3,6 +3,9 @@
   <div *ngIf="errors" class="alert alert-danger" role="alert">
     {{errors}}
   </div>
+  <div *ngIf="message" class="alert alert-success" role="alert">
+    {{message}}
+  </div>
   <form [formGroup]="bookForm" method="post" (ngSubmit)="addBook()" enctype="multipart/form-data">
 
     <div class="form-group">

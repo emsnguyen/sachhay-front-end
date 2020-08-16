@@ -19,7 +19,9 @@ export class BookCreateComponent implements OnInit {
   book:Book;
   bookForm:FormGroup;
   imagePreview:any;
-  errors:string[];
+  errors:any;
+  message:any;
+  inputImage:any;
 
   ngOnInit(): void {
     this.bookForm = this.fb.group({
@@ -50,6 +52,8 @@ export class BookCreateComponent implements OnInit {
 
       reader.readAsDataURL(event.target.files[0]); // read file as data url
 
+      this.inputImage = event.target.files[0];
+
       reader.onload = (event) => { // called once readAsDataURL is completed
         this.imagePreview = event.target.result;
       }
@@ -58,7 +62,7 @@ export class BookCreateComponent implements OnInit {
 
   addBook():void{
     let formData = new FormData();
-    formData.append('images', this.imagePreview);
+    formData.append('images', this.inputImage);
     formData.append("title",this.title.value);
     formData.append("author",this.author.value);
     formData.append("isbn",this.isbn.value);
@@ -66,11 +70,15 @@ export class BookCreateComponent implements OnInit {
     formData.append("review",this.review.value);
     this.bookService.create(formData).subscribe(
       res => {
+        this.errors = null;
+        this.message = "Book created";
         console.log('book created: {}', res);
       },
       err => {
-        console.log(err);
-        this.errors = err;
+        this.message = null;
+        this.errors = JSON.stringify(err);
+        console.log("Add book error: ", this.errors);
+
       }
     )
   }

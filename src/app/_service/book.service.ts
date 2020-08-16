@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
 import { Book } from '../_models/book';
+import { catchError, tap } from 'rxjs/operators';
 const BOOK_API = 'http://sachhay.homestead.me/api/books/';
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -26,8 +27,8 @@ export class BookService {
     let headers = new HttpHeaders();
         /** In Angular 5, including the header Content-Type can invalidate your request */
     // headers.append('Content-Type', 'multipart/form-data');
-    // headers.append('Accept', 'application/json');
-    return this.http.post(BOOK_API, formData,{headers});
+    headers.append('Accept', 'application/json');
+    return this.http.post(BOOK_API, formData, { headers});
   }
 
   update(book:Book, bookId:number):Observable<any> {

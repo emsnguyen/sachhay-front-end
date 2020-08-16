@@ -15,7 +15,7 @@ export class ErrorInterceptor implements HttpInterceptor {
                 window.location.href="login";
             }
 
-            const error = err.error.message || err.statusText;
+            const error = err.error.errors || err.error.message;
             return throwError(error);
         }))
     }

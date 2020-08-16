@@ -172,7 +172,7 @@ export class BookDetailComponent implements OnInit {
         res => {
           this.ratingId = res.id;
           this.book.ratings.push(res);
-          console.log("Rating added");
+          console.log("Rating added: {}", res);
         },
         err => {
           console.log(err);
