@@ -1,1 +1,88 @@
-<p>book-edit works!</p>
+<div class="container">
+  <h2 class="mt-5">Update your book</h2>
+  <div *ngIf="errors" class="alert alert-danger" role="alert">
+    {{ errors }}
+  </div>
+  <div *ngIf="message" class="alert alert-success" role="alert">
+    {{ message }}
+  </div>
+
+  <div *ngIf="book;else stillLoading">
+    <form [formGroup]="bookForm" method="put" (ngSubmit)="updateBook()" enctype="multipart/form-data">
+
+      <div class="form-group">
+        <button type="button" mat-raised-button (click)="fileInput.click()">Update cover image</button>
+        <input hidden (change)="onFileSelected($event)" [formControl]="images" #fileInput type="file" id="file">
+        <!-- <mat-error *ngIf="images.touched && images.invalid">
+          <mat-error *ngIf="images.errors.required">Images is required</mat-error>
+        </mat-error> -->
+      </div>
+
+      <div *ngIf="imagePreview">
+        <img class="img-fluid" width="500" [src]="imagePreview" alt="preview image" />
+      </div>
+
+      <div class="mt-2">
+        <mat-form-field appearance="fill">
+          <mat-label>Title</mat-label>
+          <input matInput placeholder="" [formControl]="title" required>
+          <mat-error *ngIf="title.touched && title.invalid">
+            <mat-error *ngIf="title.errors.required">Title is required</mat-error>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="mt-2">
+        <mat-form-field appearance="fill">
+          <mat-label>Author</mat-label>
+          <input matInput placeholder="" [formControl]="author" required>
+          <mat-error *ngIf="author.touched && author.invalid">
+            <mat-error *ngIf="author.errors.required">author is required</mat-error>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="mt-2">
+        <mat-form-field appearance="fill">
+          <mat-label>Isbn</mat-label>
+          <input matInput [formControl]="isbn" required>
+          <mat-error *ngIf="isbn.touched && isbn.invalid">
+            <mat-error *ngIf="isbn.errors.required">isbn is required</mat-error>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="mt-2">
+        <mat-form-field appearance="fill">
+          <mat-label>Publisher</mat-label>
+          <input matInput [formControl]="publisher" required>
+          <mat-error *ngIf="publisher.touched && publisher.invalid">
+            <mat-error *ngIf="publisher.errors.required">publisher is required</mat-error>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="mt-2">
+        <mat-form-field appearance="fill">
+          <mat-label>Review</mat-label>
+          <textarea matInput [formControl]="review" cdkTextareaAutosize
+            cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5" #autosize="cdkTextareaAutosize"></textarea>
+          <mat-error *ngIf="review.touched && review.invalid">
+            <mat-error *ngIf="review.errors.required">review is required</mat-error>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-group mt-2">
+        <button mat-raised-button [disabled]="!bookForm.valid">Save</button>
+      </div>
+    </form>
+  </div>
+  <ng-template #stillLoading>
+    <mat-card>
+      <mat-card-content>
+        <mat-spinner></mat-spinner>
+      </mat-card-content>
+    </mat-card>
+  </ng-template>
+</div>

@@ -8,10 +8,12 @@ import { BoardUserComponent } from './board-user/board-user.component';
 import { BoardAdminComponent } from './board-admin/board-admin.component';
 import { BookDetailComponent } from './book-detail/book-detail.component';
 import { BookCreateComponent } from './book-create/book-create.component';
+import { BookEditComponent } from './book-edit/book-edit.component';
 
 const routes: Routes = [
   { path: 'books', component: HomeComponent },
   { path: 'books/create', component: BookCreateComponent },
+  { path: 'books/edit/:id', component: BookEditComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'profile', component: ProfileComponent },

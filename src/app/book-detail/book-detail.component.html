@@ -1,111 +1,128 @@
-<div class="container mt-5">
+<div class="container mt-2">
   <div *ngIf="error" class="alert alert-danger">
     <ul>
       <li *ngFor="let e of error">{{ e }}</li>
     </ul>
   </div>
-  <div *ngIf="book; else stillLoading" class="card grid">
-    <h2>{{ book.title }}</h2>
-    <div class="card-body">
-      <img id="cover-image" src="{{ book.images[0].url }}" alt="book cover" />
+  <div *ngIf="book; else stillLoading">
+    <div class="mt-2">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>
+            <h2>{{ book.title }}</h2>
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <img *ngIf="book.images[0]" mat-card-image id="cover-image" src="{{ book.images[0].url }}" alt="book cover" />
 
-      <!-- Add your own rating -->
-      <div *ngIf="!rating">
-        <button mat-raised-button color="primary" (click)="addRating()">Add rating</button>
-      </div>
+          <!-- Add your own rating -->
+          <div *ngIf="!rating">
+            <button mat-raised-button color="primary" (click)="addRating()">Add rating</button>
+          </div>
 
-      <div *ngIf="rating">
+          <div *ngIf="rating">
+            <ul class="list-inline rating-list" *ngFor="let i of createRange(0,5)" style="display: inline-block">
+              <li [ngClass]="{'selected': (i < rating)}">
+                <i class="fa fa-star"></i>
+              </li>
+            </ul>
+            <div class="d-flex mr-5">
+              <button mat-raised-button (click)="updateRating()">Update rating</button>
+              <button mat-raised-button (click)="deleteRating()">Delete rating</button>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div class="mt-2">
+      <mat-card>
+        <input type="hidden" class="text" id="book_id" value="{{ book.id }}" />
+
         <ul class="list-inline rating-list" *ngFor="let i of createRange(0,5)" style="display: inline-block">
-          <li [ngClass]="{'selected': (i < rating)}">
+          <li [ngClass]="{'selected': (i < book.averageRating)}">
             <i class="fa fa-star"></i>
           </li>
         </ul>
-        <div class="d-flex mr-5">
-          <button mat-raised-button (click)="updateRating()">Update rating</button>
-          <button mat-raised-button (click)="deleteRating()">Delete rating</button>
-        </div>
-      </div>
+        (<span id="rating-counter">{{ book.ratings.length }}</span> votes)
+      </mat-card>
     </div>
-    <div>
-
-      <input type="hidden" class="text" id="book_id" value="{{ book.id }}" />
-
-      <ul class="list-inline rating-list" style="display: inline-block">
-        <li *ngFor="let i of createRange(0,5)" [ngClass]="{'selected': (i < book.averageRating)}">
-          <i class="fa fa-star"></i>
-        </li>
-        <li>(<span id="rating-counter">{{ book.ratings.length }}</span> votes)</li>
-      </ul>
+    <div class="mt-2">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Review</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <h3 class="card-text">{{ book.review }}</h3>
+        </mat-card-content>
+      </mat-card>
     </div>
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>Review</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <h3 class="card-text">{{ book.review }}</h3>
-      </mat-card-content>
-    </mat-card>
 
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>
-          {{ book.comments.length }} Comments
-        </mat-card-title>
-      </mat-card-header>
-      <mat-card-content *ngIf="book.comments.length">
-        <div id="comment-listing">
-          <ul *ngFor="let comment of book.comments" class="list-inline m-0">
-            <li class="list-inline-item">
-              <div class="text-secondary">
-                <p class="card-text">{{ comment.content }}</p>
-                <p class="card-text">
-                  <em>{{ comment.created_by }}</em> - <span>{{ comment.created_at }}</span>
-                </p>
-                <p class="card-text" id="comment-error"></p>
-              </div>
-            </li>
-            <li class="list-inline-item">
-              <button class="btn btn-success btn-sm rounded-0 btnEditCmt" (click)="updateComment(comment.id, comment)"
-                type="button" data-toggle="tooltip" id="btnEditCmt-{{ comment.id }}" data-placement="top" title="Edit"><i
-                  class="fa fa-edit"></i></button>
-            </li>
-            <li class="list-inline-item">
-              <button class="btn btn-danger btn-sm rounded-0 btnDeleteCmt" (click)="deleteComment(comment.id)"
-                type="button" data-toggle="tooltip" id="btnDeleteCmt-{{ comment.id }}" data-placement="top"
-                title="Delete"><i class="fa fa-trash"></i></button>
-            </li>
-            <hr />
-          </ul>
-        </div>
-        <div class="form-group">
-          <form [formGroup]="commentForm" novalidate (ngSubmit)="addComment()" id="comment_form">
-            <textarea id="comment-content" name="content" formControlName="content" class="form-control"></textarea>
-            <div *ngIf="content.invalid && (content.dirty || content.touched)" class="alert alert-danger">
+    <div class="mt-2">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>
+            {{ book.comments.length }} Comments
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content *ngIf="book.comments.length">
+          <div id="comment-listing">
+            <ul *ngFor="let comment of book.comments" class="list-inline m-0">
+              <li class="list-inline-item">
+                <div class="text-secondary">
+                  <p class="card-text">{{ comment.content }}</p>
+                  <p class="card-text">
+                    <em>{{ comment.created_by }}</em> - <span>{{ comment.created_at }}</span>
+                  </p>
+                  <p class="card-text" id="comment-error"></p>
+                </div>
+              </li>
+              <li class="list-inline-item">
+                <button class="btn btn-success btn-sm rounded-0 btnEditCmt" (click)="updateComment(comment.id, comment)"
+                  type="button" data-toggle="tooltip" id="btnEditCmt-{{ comment.id }}" data-placement="top"
+                  title="Edit"><i class="fa fa-edit"></i></button>
+              </li>
+              <li class="list-inline-item">
+                <button class="btn btn-danger btn-sm rounded-0 btnDeleteCmt" (click)="deleteComment(comment.id)"
+                  type="button" data-toggle="tooltip" id="btnDeleteCmt-{{ comment.id }}" data-placement="top"
+                  title="Delete"><i class="fa fa-trash"></i></button>
+              </li>
+              <hr />
+            </ul>
+          </div>
+          <div class="form-group">
+            <form [formGroup]="commentForm" novalidate (ngSubmit)="addComment()" id="comment_form">
+              <div class="form-group">
+                <textarea id="comment-content" name="content" formControlName="content" class="form-control"></textarea>
+                <div *ngIf="content.invalid && (content.dirty || content.touched)" class="alert alert-danger">
 
-              <div *ngIf="content.errors.required">
-                Comment is required.
+                  <div *ngIf="content.errors.required">
+                    Comment is required.
+                  </div>
+                  <div *ngIf="content.errors.minlength">
+                    Comment must be at least 3 characters long.
+                  </div>
+                </div>
               </div>
-              <div *ngIf="content.errors.minlength">
-                Comment must be at least 3 characters long.
+              <div class="form-group">
+                <button type="submit" [disabled]="!commentForm.valid" mat-raised-button color="primary">Add
+                  comment</button>
               </div>
-            </div>
-            <div class="form-group">
-              <button type="submit" [disabled]="!commentForm.valid" mat-raised-button color="primary">Add
-                comment</button>
-            </div>
-          </form>
-        </div>
-      </mat-card-content>
-    </mat-card>
+            </form>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
 
-    <mat-card>
-      <mat-card-content>
-        <div class="d-flex mr-5">
-          <button mat-raised-button (click)="updateBook(book.id)">Update book</button>
-          <button mat-raised-button (click)="deleteBook(book.id)">Delete book</button>
-        </div>
-      </mat-card-content>
-    </mat-card>
+    <div class="mt-2">
+      <mat-card>
+        <mat-card-content>
+          <div class="d-flex mr-5">
+            <button mat-raised-button [routerLink]="['/books/edit/', book.id]">Update book</button>
+            <button mat-raised-button (click)="deleteBook(book.id)">Delete book</button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
   </div>
 </div>
 <ng-template #stillLoading>

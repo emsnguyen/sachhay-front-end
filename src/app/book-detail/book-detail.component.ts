@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BookService } from '../_service/book.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Book } from '../_models/book';
 import { BookDetail } from '../_models/book-detail';
 import { TokenStorageService } from '../_service/token-storage.service';
@@ -95,10 +95,6 @@ export class BookDetailComponent implements OnInit {
 
   canModifyBook(book:Book) :boolean{
     return true;
-  }
-
-  updateBook(id:number):any {
-
   }
 
   deleteBook(id:number):any {

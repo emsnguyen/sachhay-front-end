@@ -29,7 +29,7 @@ export class RegisterComponent implements OnInit {
         this.isSignUpFailed = false;
       },
       err => {
-        this.errorMessage = err.errors;
+        this.errorMessage = JSON.stringify(err);
         this.isSignUpFailed = true;
       }
     );

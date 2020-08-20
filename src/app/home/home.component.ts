@@ -3,6 +3,7 @@ import { UserService } from '../_service/user.service';
 import { Book } from '../_models/book';
 import { Rating } from '../_models/rating';
 import { BookService } from '../_service/book.service';
+import { Constants } from '../constants/constants.constants';
 
 @Component({
   selector: 'app-home',
@@ -20,7 +21,9 @@ export class HomeComponent implements OnInit {
     this.bookService.getAll().subscribe(
       res => {
         this.books = res.data;
-        this.books.forEach(book => book.averageRating = this.getAverageBookRating(book.ratings));
+        this.books.forEach(book => {
+          book.averageRating = this.getAverageBookRating(book.ratings)
+        });
       },
       err => {
         this.errorMessage = err.message;
