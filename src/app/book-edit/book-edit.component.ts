@@ -1,10 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { switchMap } from 'rxjs/operators';
-import { BookService } from '../_service/book.service';
-import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { Book } from '../_models/book';
+import { BookService } from '../_service/book.service';
 
 @Component({
   selector: 'app-book-edit',
@@ -90,9 +89,6 @@ export class BookEditComponent implements OnInit {
     formData.append("isbn",this.isbn.value);
     formData.append("publisher",this.publisher.value);
     formData.append("review",this.review.value);
-    // let formData = new Book();
-    // formData.title = this.title.value;
-    // formData.images = this.inputImage;
     this.bookService.update(this.bookId, formData).subscribe(
       res => {
         this.errors = null;

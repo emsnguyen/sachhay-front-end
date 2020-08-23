@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { BookService } from '../_service/book.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
+import { EditCommentDialogComponent } from '../edit-comment-dialog/edit-comment-dialog.component';
+import { EditRatingDialogComponent } from '../edit-rating-dialog/edit-rating-dialog.component';
 import { Book } from '../_models/book';
 import { BookDetail } from '../_models/book-detail';
-import { TokenStorageService } from '../_service/token-storage.service';
-import { Rating } from '../_models/rating';
 import { Comment } from '../_models/comment';
-import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
-import { EditRatingDialogComponent } from '../edit-rating-dialog/edit-rating-dialog.component';
-import { RatingService } from '../_service/rating.service';
+import { Rating } from '../_models/rating';
+import { BookService } from '../_service/book.service';
 import { CommentService } from '../_service/comment.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { EditCommentDialogComponent } from '../edit-comment-dialog/edit-comment-dialog.component';
+import { RatingService } from '../_service/rating.service';
+import { TokenStorageService } from '../_service/token-storage.service';
 
 @Component({
   selector: 'app-book-detail',
@@ -28,6 +28,7 @@ export class BookDetailComponent implements OnInit {
   constructor(
     private bookService:BookService,
     private route : ActivatedRoute,
+    private router: Router,
     private dialog:MatDialog,
     private tokenStorageService: TokenStorageService,
     private ratingService: RatingService,
@@ -98,7 +99,14 @@ export class BookDetailComponent implements OnInit {
   }
 
   deleteBook(id:number):any {
-
+    this.bookService.delete(id).subscribe(
+      res => {
+        this.router.navigateByUrl('/books');
+      },
+      err => {
+        console.log(err.message);
+      }
+    );
   }
   addComment():any {
     const content = this.commentForm.get('content').value;
