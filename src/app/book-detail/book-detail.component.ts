@@ -12,6 +12,7 @@ import { BookService } from '../_service/book.service';
 import { CommentService } from '../_service/comment.service';
 import { RatingService } from '../_service/rating.service';
 import { TokenStorageService } from '../_service/token-storage.service';
+import { User } from '../_models/user';
 
 @Component({
   selector: 'app-book-detail',
@@ -24,6 +25,11 @@ export class BookDetailComponent implements OnInit {
   rating = 0;
   ratingId:number;
   commentForm:FormGroup;
+
+  user:User;
+  isBanned:boolean;
+  isAdmin:boolean;
+  username:string;
 
   constructor(
     private bookService:BookService,
@@ -38,6 +44,12 @@ export class BookDetailComponent implements OnInit {
 
   ngOnInit(): void {
     const id = this.route.snapshot.params.id;
+
+    this.user = this.tokenStorageService.getUser();
+    this.isBanned = this.user.banned;
+    this.isAdmin = this.user.role === 1;
+    this.username = this.user.name;
+
     this.bookService.getOne(id).subscribe(
       res => {
         this.book = res.data;
@@ -49,7 +61,6 @@ export class BookDetailComponent implements OnInit {
           this.rating = myRating.value;
           this.ratingId = myRating.id;
         }
-
       },
       error => {
         this.error = error;
@@ -60,7 +71,7 @@ export class BookDetailComponent implements OnInit {
     });
   }
   getMyRating(ratings:Rating[]):Rating {
-    const currentUserRatings = ratings.filter(rating => rating.created_by == this.tokenStorageService.getUser().username);
+    const currentUserRatings = ratings.filter(rating => rating.created_by === this.username);
     if (currentUserRatings) return currentUserRatings[0];
     return null;
   }
@@ -79,23 +90,18 @@ export class BookDetailComponent implements OnInit {
   }
 
   canModifyComment(comment:Comment):boolean {
-    let user = this.tokenStorageService.getUser();
-    let isBanned = user.banned;
-    let isAdmin = user.role === 1;
-    let isCommentCreator = comment.created_by === user.name;
-    return isAdmin || (!isBanned && isCommentCreator);
+    let isCommentCreator = comment.created_by === this.username;
+    return this.isAdmin || (!this.isBanned && isCommentCreator);
   }
 
   canModifyRating(rating:Rating):boolean {
-    let user = this.tokenStorageService.getUser();
-    let isBanned = user.banned;
-    let isAdmin = user.role === 1;
-    let isRatingCreator = rating.created_by === user.name;
-    return isAdmin || (!isBanned && isRatingCreator);
+    let isRatingCreator = rating.created_by === this.user.name;
+    return this.isAdmin || (!this.isBanned && isRatingCreator);
   }
 
   canModifyBook(book:Book) :boolean{
-    return true;
+    let isBookCreator = book.created_by === this.user.name;
+    return this.isAdmin || (!this.isBanned && isBookCreator);
   }
 
   deleteBook(id:number):any {

@@ -76,12 +76,12 @@
                   <p class="card-text" id="comment-error"></p>
                 </div>
               </li>
-              <li class="list-inline-item">
+              <li class="list-inline-item"  *ngIf="comment.canModifyComment">
                 <button class="btn btn-success btn-sm rounded-0 btnEditCmt" (click)="updateComment(comment.id, comment)"
                   type="button" data-toggle="tooltip" id="btnEditCmt-{{ comment.id }}" data-placement="top"
                   title="Edit"><i class="fa fa-edit"></i></button>
               </li>
-              <li class="list-inline-item">
+              <li class="list-inline-item" *ngIf="comment.canModifyComment">
                 <button class="btn btn-danger btn-sm rounded-0 btnDeleteCmt" (click)="deleteComment(comment.id)"
                   type="button" data-toggle="tooltip" id="btnDeleteCmt-{{ comment.id }}" data-placement="top"
                   title="Delete"><i class="fa fa-trash"></i></button>
@@ -113,7 +113,7 @@
       </mat-card>
     </div>
 
-    <div class="mt-2">
+    <div class="mt-2" *ngIf="book.canModifyBook">
       <mat-card>
         <mat-card-content>
           <div class="d-flex mr-5">

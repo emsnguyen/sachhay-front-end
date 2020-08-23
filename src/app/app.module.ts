@@ -8,7 +8,6 @@ import { RegisterComponent } from './register/register.component';
 import { HomeComponent } from './home/home.component';
 import { ProfileComponent } from './profile/profile.component';
 import { BoardAdminComponent } from './board-admin/board-admin.component';
-import { BoardUserComponent } from './board-user/board-user.component';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -27,7 +26,10 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {TextFieldModule} from '@angular/cdk/text-field';
-
+import {MatTableModule} from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import {MatIconModule} from '@angular/material/icon';
+// import {MatTableDataSource} from '@angular/material/table';
 @NgModule({
   declarations: [
     AppComponent,
@@ -36,7 +38,6 @@ import {TextFieldModule} from '@angular/cdk/text-field';
     HomeComponent,
     ProfileComponent,
     BoardAdminComponent,
-    BoardUserComponent,
     BookDetailComponent,
     BookEditComponent,
     BookCreateComponent,
@@ -56,7 +57,11 @@ import {TextFieldModule} from '@angular/cdk/text-field';
     MatProgressSpinnerModule,
     MatFormFieldModule,
     MatInputModule,
-    TextFieldModule
+    TextFieldModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatIconModule
+    // MatTableDataSource
   ],
   providers: [
     // { provide: APP_INITIALIZER, useFactory: appInitializer, multi: true, deps: [AuthService] },
