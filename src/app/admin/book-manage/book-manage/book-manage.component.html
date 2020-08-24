@@ -1,0 +1,120 @@
+<div class="container">
+  <div class="example-container mat-elevation-z8">
+    <div class="example-loading-shade" *ngIf="isLoadingResults || isRateLimitReached">
+      <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+      <div class="example-rate-limit-reached" *ngIf="isRateLimitReached">
+        Sachhay's API rate limit has been reached. It will be reset in one minute.
+      </div>
+    </div>
+
+    <div class="example-table-container">
+
+      <table mat-table [dataSource]="dataSource" id="book-table" matSort matSortActive="created_at"
+        matSortDisableClear matSortDirection="desc">
+        <!-- Number Column -->
+        <ng-container matColumnDef="number">
+          <th mat-header-cell *matHeaderCellDef>#</th>
+          <td mat-cell *matCellDef="let row">{{ row.number }}</td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef>title</th>
+
+          <td mat-cell *matCellDef="let user">
+            <ng-container *ngIf="!editBook?.id || !user?.id || user?.id!==editBook?.id">
+              {{ user.title }}
+            </ng-container>
+            <ng-container *ngIf="editBook?.id && user?.id && user?.id===editBook?.id">
+              <mat-form-field appearance="outline">
+                <input matInput placeholder="title" [disabled]="editdisabled" name="title" [(ngModel)]="user.title">
+              </mat-form-field>
+            </ng-container>
+          </td>
+        </ng-container>
+
+        <!-- author Column -->
+        <ng-container matColumnDef="author">
+          <th mat-header-cell *matHeaderCellDef>author</th>
+
+          <td mat-cell *matCellDef="let user">
+            <ng-container *ngIf="!editBook?.id || !user?.id || user?.id!==editBook?.id">
+              {{ user.author }}
+            </ng-container>
+            <ng-container *ngIf="editBook?.id && user?.id && user?.id===editBook?.id">
+              <mat-form-field appearance="outline">
+                <input matInput placeholder="author" [disabled]="editdisabled" name="author" [(ngModel)]="user.author">
+              </mat-form-field>
+            </ng-container>
+          </td>
+
+        </ng-container>
+
+        <!-- isbn Column -->
+        <ng-container matColumnDef="isbn">
+          <th mat-header-cell *matHeaderCellDef>isbn</th>
+
+          <td mat-cell *matCellDef="let user">
+            <ng-container *ngIf="!editBook?.id || !user?.id || user?.id!==editBook?.id">
+              {{ user.isbn }}
+            </ng-container>
+            <ng-container *ngIf="editBook?.id && user?.id && user?.id===editBook?.id">
+              <mat-form-field appearance="outline">
+                <input matInput placeholder="isbn" [disabled]="editdisabled" name="isbn" [(ngModel)]="user.isbn">
+              </mat-form-field>
+            </ng-container>
+          </td>
+        </ng-container>
+
+        <!-- publisher Column -->
+        <ng-container matColumnDef="publisher">
+          <th mat-header-cell *matHeaderCellDef>publisher</th>
+
+          <td mat-cell *matCellDef="let user">
+            <ng-container *ngIf="!editBook?.id || !user?.id || user?.id!==editBook?.id">
+              {{ user.publisher }}
+            </ng-container>
+            <ng-container *ngIf="editBook?.id && user?.id && user?.id===editBook?.id">
+              <mat-form-field appearance="outline">
+                <input matInput placeholder="publisher" [disabled]="editdisabled" name="publisher" [(ngModel)]="user.publisher">
+              </mat-form-field>
+            </ng-container>
+          </td>
+
+        </ng-container>
+
+        <!-- Created Column -->
+        <ng-container matColumnDef="created_at">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>
+            Created At
+          </th>
+          <td mat-cell *matCellDef="let row">{{ row.created_at | date }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef>Action</th>
+          <mat-cell *matCellDef="let user">
+            <!-- <span *ngIf="pagePerm && pagePerm.indexOf('u')!==-1"> -->
+            <ng-container *ngIf="!editBook?.id || !user?.id || user?.id!==editBook?.id">
+              <button mat-raised-button color="primary" [disabled]="editdisabled" (click)="editRow(user)">Edit</button>
+              <button mat-raised-button color="warning" [disabled]="editdisabled"
+                (click)="deleteRow(user)">Delete</button>
+            </ng-container>
+            <ng-container *ngIf="editBook?.id && user?.id && user?.id===editBook?.id">
+              <button mat-raised-button color="accent" [disabled]="editdisabled"
+                (click)="confirmEdit()">Confirm</button>
+              <button mat-raised-button color="warn" [disabled]="editdisabled" (click)="cancelEdit()">Cancel</button>
+            </ng-container>
+            <!-- </span> -->
+            <!-- <span *ngIf="!pagePerm || (pagePerm && pagePerm.indexOf('v')===-1 && pagePerm && pagePerm.indexOf('u')===-1)">N/A</span> -->
+          </mat-cell>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+
+    <mat-paginator [length]="resultsLength" [pageSize]="30"></mat-paginator>
+  </div>
+</div>

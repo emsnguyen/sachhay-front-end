@@ -7,7 +7,6 @@ import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { HomeComponent } from './home/home.component';
 import { ProfileComponent } from './profile/profile.component';
-import { BoardAdminComponent } from './board-admin/board-admin.component';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -29,7 +28,9 @@ import {TextFieldModule} from '@angular/cdk/text-field';
 import {MatTableModule} from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import {MatIconModule} from '@angular/material/icon';
-// import {MatTableDataSource} from '@angular/material/table';
+import { UserManageComponent } from './admin/user-manage/user-manage/user-manage.component';
+import { BookManageComponent } from './admin/book-manage/book-manage/book-manage.component';
+import { BoardAdminComponent } from './admin/dashboard/board-admin.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -37,12 +38,14 @@ import {MatIconModule} from '@angular/material/icon';
     RegisterComponent,
     HomeComponent,
     ProfileComponent,
-    BoardAdminComponent,
     BookDetailComponent,
     BookEditComponent,
     BookCreateComponent,
     EditRatingDialogComponent,
-    EditCommentDialogComponent
+    EditCommentDialogComponent,
+    BookManageComponent,
+    UserManageComponent,
+    BoardAdminComponent
   ],
   imports: [
     BrowserModule,

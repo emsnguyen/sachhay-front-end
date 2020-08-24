@@ -1,5 +1,8 @@
 <div class="container mt-5">
   <h2>Available Books</h2>
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    {{errorMessage}}
+  </div>
   <div *ngIf="books && books.length; else stillLoading">
     <div *ngFor="let book of books">
       <div class="card">
@@ -34,7 +37,7 @@
     <button mat-raised-button routerLink="/books/create" color="primary">Add book</button>
   </div>
 </div>
-<ng-template #stillLoading>
+<ng-template #stillLoading *ngIf="!errorMessage">
   <mat-card>
     <mat-card-content>
       <mat-spinner></mat-spinner>

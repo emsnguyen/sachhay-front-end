@@ -1,12 +1,16 @@
-<div id="app">
+<div id="app" class="container">
   <nav class="navbar navbar-expand navbar-dark bg-dark">
     <a href="#" class="navbar-brand">Sachhay</a>
     <ul class="navbar-nav mr-auto" routerLinkActive="active">
       <li class="nav-item">
         <a href="/books" class="nav-link" routerLink="books">Books </a>
       </li>
-      <li class="nav-item">
-        <a href="/admin" class="nav-link" *ngIf="isLoggedIn" routerLink="users">Admin</a>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Admin</a>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="#" routerLink="admin/users">Manage users</a>
+          <a class="dropdown-item" href="#" routerLink="admin/books">Manage books</a>
+        </div>
       </li>
     </ul>
 
@@ -20,6 +24,10 @@
     </ul>
 
     <ul class="navbar-nav ml-auto" *ngIf="isLoggedIn">
+      <form class="form-inline my-2 my-lg-0" [formGroup]="searchForm" (ngSubmit)="searchBook()">
+        <input class="form-control mr-sm-2" type="search" placeholder="search by title or author" [formControl]="q" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0" [disabled]="!searchForm.valid" type="submit">Search</button>
+      </form>
       <li class="nav-item">
         <a href="" class="nav-link" routerLink="profile">{{ username }}</a>
       </li>

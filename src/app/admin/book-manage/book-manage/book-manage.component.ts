@@ -1,44 +1,39 @@
-import {
-  AfterViewInit,
-  Component,
-  ViewChild
-} from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Book } from '../../../_models/book';
+import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { User } from '../_models/user';
-import { UserService } from '../_service/user.service';
-import { MatTableDataSource } from '@angular/material/table';
+import { BookService } from '../../../_service/book.service';
 
 @Component({
-  selector: 'app-board-admin',
-  templateUrl: './board-admin.component.html',
-  styleUrls: ['./board-admin.component.scss']
+  selector: 'app-book-manage',
+  templateUrl: './book-manage.component.html',
+  styleUrls: ['./book-manage.component.scss']
 })
-export class BoardAdminComponent implements AfterViewInit {
+export class BookManageComponent implements OnInit {
 
-  displayedColumns: string[] = ['name', 'username', 'email', 'role', 'banned', 'created_at', 'action'];
-  data: User[] = [];
+  displayedColumns: string[] = ['title', 'author', 'isbn', 'publisher', 'created_at', 'action'];
+  data: Book[] = [];
 
   resultsLength = 0;
   isLoadingResults = true;
   isRateLimitReached = false;
 
-  editUser: any;
-  oldUser: any;
+  editBook: any;
+  oldBook: any;
   editdisabled: boolean;
 
-  dataSource: MatTableDataSource<any>;
+  dataSource: MatTableDataSource < any > ;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private userService: UserService) {}
+  constructor(private bookService: BookService) {}
 
-  ngAfterViewInit(): void {
-    // this.sort.sortChange.subscribe(()=>this.paginator.pageIndex = 0);
+  ngOnInit(): void {
 
     this.isLoadingResults = true;
-    this.userService.getAll().subscribe(res => {
+    this.bookService.getAll().subscribe(res => {
         this.data = res.data;
         this.dataSource = new MatTableDataSource(this.data);
         this.isLoadingResults = false;
@@ -46,19 +41,19 @@ export class BoardAdminComponent implements AfterViewInit {
         this.resultsLength = this.data.length;
       },
       err => {
-        console.log(err)
+        console.log(err);
       }
     );
   }
   editRow(user): void {
     console.log(user);
-    this.editUser = user && user.id ? user : {};
-    this.oldUser = {
-      ...this.editUser
+    this.editBook = user && user.id ? user : {};
+    this.oldBook = {
+      ...this.editBook
     };
   }
   deleteRow(user): void {
-    this.userService.delete(user.id).subscribe(
+    this.bookService.delete(user.id).subscribe(
       res => {
         console.log('delete success ', res);
         let index = this.data.findIndex(item => item.id === user.id);
@@ -72,15 +67,17 @@ export class BoardAdminComponent implements AfterViewInit {
     )
   }
   confirmEdit(): void {
-    //updateEdit
     this.editdisabled = true;
-    this.userService.update(this.editUser)
+    let formData = new FormData();
+    delete this.editBook.images;
+    Object.keys(this.editBook).forEach(key => formData.append(key, this.editBook[key]));
+    this.bookService.update(this.editBook.id, formData)
       .subscribe(
         res => {
-          this.editUser = {};
+          this.editBook = {};
           this.editdisabled = false;
           if (res.data) {
-            this.oldUser = {};
+            this.oldBook = {};
             console.log(res.data, 'Success!');
           } else {
             this.cancelEdit();
@@ -94,9 +91,9 @@ export class BoardAdminComponent implements AfterViewInit {
         });
   }
   cancelEdit(): void {
-    //cancel
-    this.editUser = {};
-    let index = this.data.findIndex(item => item.id === this.oldUser.id)
-    this.data.splice(index, 1, this.oldUser);
+    this.editBook = {};
+    let index = this.data.findIndex(item => item.id === this.oldBook.id)
+    this.data.splice(index, 1, this.oldBook);
   }
+
 }
